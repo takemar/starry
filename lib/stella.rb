@@ -4,7 +4,7 @@ module Stella
 
   class << self
 
-  def serialize(input)
+    def serialize(input)
       case input
       when {}, []
         return nil
@@ -67,7 +67,7 @@ module Stella
         input.to_s
       when Float
         x = input.round(3, half: :even)
-        if x.abs >= 10 ** 15
+        if x.abs >= 10 ** 12
           raise ValueRangeError, "Numeric value in HTTP Structured Field must have an absolute value less than 10 ** 15, but #{ input } given."
         end
         x.to_s

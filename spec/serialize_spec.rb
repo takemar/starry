@@ -11,7 +11,7 @@ RSpec.describe 'Stella.serialize' do
           data = parse_test(test_case['expected'], test_case['header_type'])
           field_value = (test_case['canonical'] || test_case['raw']).join(', ')
           example test_case['name'] do
-            output = Stella.serialize(data)
+            output = Stella.serialize(data).to_s
             expect(output).to eq(field_value)
           end
         rescue NotImplementedTypeError
@@ -34,7 +34,7 @@ RSpec.describe 'Stella.serialize' do
             else
               field_value = test_case['canonical'].join(', ')
               example test_case['name'] do
-                output = Stella.serialize(data)
+                output = Stella.serialize(data).to_s
                 expect(output).to eq(field_value)
               end
             end
