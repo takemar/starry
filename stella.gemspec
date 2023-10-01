@@ -5,6 +5,6 @@ Gem::Specification.new do |s|
   s.summary = 'An implementation of HTTP Structured Field Values (RFC 8941)'
   s.author = 'Takemaro'
   s.email = 'info@takemaro.com'
-  s.files = ['lib/stella.rb']
+  s.files = Dir.glob('lib/**/*.rb')
   s.homepage = 'https://github.com/takemar/stella'
 end
