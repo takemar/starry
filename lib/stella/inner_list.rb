@@ -2,14 +2,14 @@ require 'forwardable'
 
 class Stella::InnerList
 
-  attr_accessor :items, :parameters
+  attr_accessor :value, :parameters
 
   include Enumerable
   extend Forwardable
-  def_delegator :items, :each
+  def_delegator :value, :each
 
-  def initialize(items = [], parameters = {})
-    @items = items
+  def initialize(value = [], parameters = {})
+    @value = value
     @parameters = parameters
   end
 

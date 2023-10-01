@@ -10,5 +10,4 @@ class Stella::Item
   def to_s
     "#{ Stella.serialize_bare_item(value) }#{ Stella.serialize_parameters(parameters) }"
   end
-  
 end

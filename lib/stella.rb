@@ -24,7 +24,7 @@ module Stella
     end
 
     def serialize_parameters(input)
-      input.map do |key, value|
+      input.transform_keys(&:to_s).map do |key, value|
         if value == true
           ";#{ serialize_key(key) }"
         else
@@ -34,12 +34,12 @@ module Stella
     end
 
     def serialize_key(input)
-      raise unless input.match?(/\A[a-z*]([a-z0-9_\-.*]*\z)/)
+      raise unless input.match?(/\A[a-z*][a-z0-9_\-.*]*\z/)
       input
     end
 
     def serialize_dictionary(input)
-      input.map do |key, value|
+      input.transform_keys(&:to_s).map do |key, value|
         if value == true
           serialize_key(key)
         elsif value.kind_of?(Item) && value.value == true
