@@ -147,3 +147,4 @@ end
 require_relative 'stella/inner_list'
 require_relative 'stella/item'
 require_relative 'stella/parser'
+require_relative 'stella/version'

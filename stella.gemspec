@@ -1,6 +1,8 @@
+require_relative 'lib/stella/version'
+
 Gem::Specification.new do |s|
   s.name = 'stella'
-  s.version = '0.1.0'
+  s.version = Stella::VERSION
   s.license = 'MIT'
   s.summary = 'An implementation of HTTP Structured Field Values (RFC 8941)'
   s.author = 'Takemaro'
