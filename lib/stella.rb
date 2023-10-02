@@ -2,7 +2,7 @@ require 'base64'
 
 module Stella
 
-  class ValueRangeError < ::StandardError; end
+  class SerializeError < ::StandardError; end
   class ParseError < ::StandardError; end
 
   class << self
@@ -65,13 +65,13 @@ module Stella
       case input
       when Integer
         if input.abs >= 10 ** 15
-          raise ValueRangeError, "Integer value in HTTP Structured Field must have an absolute value less than 10 ** 15, but #{ input } given."
+          raise SerializeError, "Integer value in HTTP Structured Field must have an absolute value less than 10 ** 15, but #{ input } given."
         end
         input.to_s
       when Float
         x = input.round(3, half: :even)
         if x.abs >= 10 ** 12
-          raise ValueRangeError, "Numeric value in HTTP Structured Field must have an absolute value less than 10 ** 15, but #{ input } given."
+          raise SerializeError, "Numeric value in HTTP Structured Field must have an absolute value less than 10 ** 15, but #{ input } given."
         end
         x.to_s
       when String
@@ -79,13 +79,13 @@ module Stella
           ":#{ Base64.strict_encode64(input) }:"
         else
           unless input.match?(/\A[\u0020-\u007E]*\z/)
-            raise ValueRangeError, "String value in HTTP Structured Field must consist of only ASCII printable characters, but given value #{ input.inspect } does not meet that."
+            raise SerializeError, "String value in HTTP Structured Field must consist of only ASCII printable characters, but given value #{ input.inspect } does not meet that."
           end
           "\"#{ input.gsub(/\\|"/) { "\\#{ _1 }" } }\""
         end
       when Symbol
         unless input.to_s.match?(/\A[A-Za-z*][!#$%&'*+\-.^_`|~0-9A-Za-z:\/]*\z/)
-          raise ValueRangeError, "The given value #{ input.inspect } contains characters that are not allowed as Token in HTTP Structured Field."
+          raise SerializeError, "The given value #{ input.inspect } contains characters that are not allowed as Token in HTTP Structured Field."
         end
         input.to_s
       when true
@@ -93,7 +93,7 @@ module Stella
       when false
         '?0'
       else
-        raise ValueRangeError, "The given value #{ input.inspect } cannnot be used as a bare item of HTTP Structured Field."
+        raise SerializeError, "The given value #{ input.inspect } cannnot be used as a bare item of HTTP Structured Field."
       end
     end
 
@@ -102,13 +102,13 @@ module Stella
       when InnerList
         input.to_s
       when Hash
-        raise ValueRangeError, "Hash cannnot be used as an item of HTTP Structured Field, but #{ input.inspect } given."
+        raise SerializeError, "Hash cannnot be used as an item of HTTP Structured Field, but #{ input.inspect } given."
       when Enumerable
         InnerList.new(input).to_s
       when Item
         case input.value
         when Hash
-          raise ValueRangeError, "Hash cannnot be used as an item of HTTP Structured Field, but #{ input.value.inspect } given."
+          raise SerializeError, "Hash cannnot be used as an item of HTTP Structured Field, but #{ input.value.inspect } given."
         when Enumerable
           InnerList.new(input.value, input.parameters).to_s
         else
