@@ -13,6 +13,10 @@ class Stella::InnerList
     @parameters = parameters
   end
 
+  def ==(other)
+    self.class == other.class && self.value == other.value && self.parameters == other.parameters
+  end
+
   def to_s
     members = self.map do |item|
       Stella.serialize_item(item)

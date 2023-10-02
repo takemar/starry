@@ -2,6 +2,9 @@ require 'base64'
 
 module Stella
 
+  class ValueRangeError < ::StandardError; end
+  class ParseError < ::StandardError; end
+
   class << self
 
     def serialize(input)
@@ -117,16 +120,28 @@ module Stella
     end
 
     def parse_list(input)
+      ensure_ascii_only(input)
+      Parser.new(input).parse(:list)
     end
 
     def parse_dictionary(input)
+      ensure_ascii_only(input)
+      Parser.new(input).parse(:dictionary)
     end
 
     def parse_item(input)
+      ensure_ascii_only(input)
+      Parser.new(input).parse(:item)
+    end
+
+    private def ensure_ascii_only(input)
+      unless input.ascii_only?
+        raise ParseError, "Input string contains unexpected non-ASCII character."
+      end
     end
   end
 end
 
 require_relative 'stella/inner_list'
 require_relative 'stella/item'
-require_relative 'stella/value_range_error'
+require_relative 'stella/parser'
