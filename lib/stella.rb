@@ -37,7 +37,9 @@ module Stella
     end
 
     def serialize_key(input)
-      raise unless input.match?(/\A[a-z*][a-z0-9_\-.*]*\z/)
+      unless input.match?(/\A[a-z*][a-z0-9_\-.*]*\z/)
+        raise SerializeError, "The given value #{ input.inspect } contains characters that are not allowed as a key for dictionary / parameters in HTTP Structured Field."
+      end
       input
     end
 

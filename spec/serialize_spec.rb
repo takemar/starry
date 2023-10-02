@@ -29,7 +29,7 @@ RSpec.describe 'Stella.serialize' do
               example test_case['name'] do
                 expect do
                   Stella.serialize(data)
-                end.to raise_error
+                end.to raise_error(Stella::SerializeError)
               end
             else
               field_value = test_case['canonical'].join(', ')

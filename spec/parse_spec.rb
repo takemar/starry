@@ -12,7 +12,7 @@ RSpec.describe 'Stella.parse_*' do
             example test_case['name'] do
               expect do
                 Stella.send("parse_#{ test_case['header_type'] }", field_value)
-              end.to raise_error
+              end.to raise_error(Stella::ParseError)
             end
           else
             data = parse_test(test_case['expected'], test_case['header_type'])
