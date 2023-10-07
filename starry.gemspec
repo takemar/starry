@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.metadata = {
     'bug_tracker_uri' => 'https://github.com/takemar/starry/issues',
     'homepage_uri' => 'https://github.com/takemar/starry',
-    'source_code_uri' => 'https://github.com/takemar/starry/issues',
+    'source_code_uri' => 'https://github.com/takemar/starry',
   }
   s.required_ruby_version = '>= 2.7.0'
 end
