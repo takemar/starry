@@ -1,6 +1,6 @@
 require 'forwardable'
 
-class Stella::InnerList
+class Starry::InnerList
 
   attr_accessor :value, :parameters
 
@@ -19,8 +19,8 @@ class Stella::InnerList
 
   def to_s
     members = self.map do |item|
-      Stella.serialize_item(item)
+      Starry.serialize_item(item)
     end
-    "(#{ members.join(' ') })#{ Stella.serialize_parameters(parameters) }"
+    "(#{ members.join(' ') })#{ Starry.serialize_parameters(parameters) }"
   end
 end

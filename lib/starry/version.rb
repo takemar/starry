@@ -1,3 +1,3 @@
-module Stella
+module Starry
   VERSION = '0.1.0'
 end

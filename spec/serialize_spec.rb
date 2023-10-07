@@ -1,7 +1,7 @@
 require 'json'
 require_relative 'parse_test_format'
 
-RSpec.describe 'Stella.serialize' do
+RSpec.describe 'Starry.serialize' do
   context 'structured-field-tests' do
     Dir.glob('./structured-field-tests/*.json') do |f|
       test_cases = JSON.parse(File.read(f))
@@ -11,7 +11,7 @@ RSpec.describe 'Stella.serialize' do
           data = parse_test(test_case['expected'], test_case['header_type'])
           field_value = (test_case['canonical'] || test_case['raw']).join(', ')
           example test_case['name'] do
-            output = Stella.serialize(data).to_s
+            output = Starry.serialize(data).to_s
             expect(output).to eq(field_value)
           end
         rescue NotImplementedTypeError
@@ -28,13 +28,13 @@ RSpec.describe 'Stella.serialize' do
             if test_case['must_fail']
               example test_case['name'] do
                 expect do
-                  Stella.serialize(data)
-                end.to raise_error(Stella::SerializeError)
+                  Starry.serialize(data)
+                end.to raise_error(Starry::SerializeError)
               end
             else
               field_value = test_case['canonical'].join(', ')
               example test_case['name'] do
-                output = Stella.serialize(data).to_s
+                output = Starry.serialize(data).to_s
                 expect(output).to eq(field_value)
               end
             end

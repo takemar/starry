@@ -1,5 +1,5 @@
 require 'base32'
-require './lib/stella'
+require './lib/starry'
 
 class NotImplementedTypeError < StandardError; end
 
@@ -17,7 +17,7 @@ def parse_test(data, type)
 end
 
 def parse_test_item(data)
-  Stella::Item.new(parse_test_bare_item(data.first), parse_test_parameters(data.last))
+  Starry::Item.new(parse_test_bare_item(data.first), parse_test_parameters(data.last))
 end
 
 def parse_test_list(data)
@@ -67,7 +67,7 @@ def parse_test_item_or_inner_list(data)
 end
 
 def parse_test_inner_list(data)
-  Stella::InnerList.new(
+  Starry::InnerList.new(
     data.first.map { parse_test_item(_1) },
     parse_test_parameters(data.last.to_h),
   )

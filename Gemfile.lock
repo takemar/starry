@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    stella (0.1.0)
+    starry (0.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -28,7 +28,7 @@ PLATFORMS
 DEPENDENCIES
   base32
   rspec
-  stella!
+  starry!
 
 BUNDLED WITH
    2.4.10

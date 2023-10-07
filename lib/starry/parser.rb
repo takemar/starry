@@ -2,7 +2,7 @@ require 'base64'
 require 'forwardable'
 require 'strscan'
 
-class Stella::Parser
+class Starry::Parser
 
   extend Forwardable
 
@@ -60,7 +60,7 @@ class Stella::Parser
       consume_sp
       if scan(')')
         parameters = parse_parameters
-        return Stella::InnerList.new(output, parameters)
+        return Starry::InnerList.new(output, parameters)
       end
       output << parse_item
       unless check(/[ )]/)
@@ -78,7 +78,7 @@ class Stella::Parser
         value = parse_item_or_inner_list
       else
         parameters = parse_parameters
-        value = Stella::Item.new(true, parameters)
+        value = Starry::Item.new(true, parameters)
       end
       output[key] = value
       consume_ows
@@ -93,7 +93,7 @@ class Stella::Parser
   def parse_item
     value = parse_bare_item
     parameters = parse_parameters
-    Stella::Item.new(value, parameters)
+    Starry::Item.new(value, parameters)
   end
 
   def parse_bare_item
@@ -199,7 +199,7 @@ class Stella::Parser
   end
 
   def parse_error(_ = nil)
-    raise Stella::ParseError
+    raise Starry::ParseError
   end
 
 end

@@ -1,4 +1,4 @@
-class Stella::Item
+class Starry::Item
 
   attr_accessor :value, :parameters
 
@@ -12,6 +12,6 @@ class Stella::Item
   end
 
   def to_s
-    "#{ Stella.serialize_bare_item(value) }#{ Stella.serialize_parameters(parameters) }"
+    "#{ Starry.serialize_bare_item(value) }#{ Starry.serialize_parameters(parameters) }"
   end
 end
