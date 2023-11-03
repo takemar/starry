@@ -29,11 +29,11 @@ Starry.parse_list('r34.example.net; error=http_request_error, ExampleCDN')
 #   @value=:"r34.example.net">,
 #  #<Starry::Item:0x0000000105a81cd0 @parameters={}, @value=:ExampleCDN>]
 
-# Retrieving bare value of item
+# Retrieving bare value
 Starry.parse_list('r34.example.net; error=http_request_error, ExampleCDN')[1].value
 # => :ExampleCDN
 
-# Retrieving parameters hash of item
+# Retrieving parameters
 Starry.parse_list('r34.example.net; error=http_request_error, ExampleCDN')[0].parameters
 # => {"error"=>:http_request_error}
 
@@ -70,6 +70,48 @@ Starry.parse_dictionary(
 
 ### Serializing
 
-Use `Starry.serialize`.
+Use `Starry.serialize`. This single method is used for all three types: List, Dictionary, and Item.
 
-// TODO: Example code
+If an Item or an Inner List has parameters, create a new `Starry::Item` or `Starry::InnerList` class object and use it. Non-parameterized values can be contained without such a wrapping object. Also, note that keys of the parameters hash can be either strings or symbols.
+
+```ruby
+require 'starry'
+
+Starry.serialize([
+  Starry::Item.new(:'r34.example.net', { 'error' => :http_request_error }),
+  :ExampleCDN
+])
+# => "r34.example.net;error=http_request_error, ExampleCDN"
+
+Starry.serialize({
+  'sig-b22' => Starry::InnerList.new(
+    ['@authority', 'content-digest', Starry::Item.new('@query-param', { name: 'Pet' })],
+    { created: 1618884473, keyid: 'test-key-rsa-pss', tag: 'header-example' }
+  )
+})
+# => "sig-b22=(\"@authority\" \"content-digest\" \"@query-param\";name=\"Pet\");created=1618884473;keyid=\"test-key-rsa-pss\";tag=\"header-example\""
+```
+
+## Further Topics
+
+### Type mappings
+
+The Structured Field Values specification defines several data types. Here we describe which Ruby class is used for each of them in this library.
+
+- For **Lists**, `Array` is used.
+- For **Inner Lists**, `Starry::InnerList` is used.
+    - If it is not parameterized, `Array` may also be used when serializing.
+- For **parameters**, `Hash` is used.
+- For **Dictionaries**, `Hash` is used.
+- For **Items**, `Starry::Item` is used.
+    - When serializing, `Starry::Item` is not necessarily needed if the value is not parameterized. See the description and examples above.
+- For **Integer** values, `Integer` is used.
+    - Note that its absolute value is limited to less than `10**15`.
+- For **Decimal** values, `Float` is used.
+    - Note that its absolute value is limited to less than `10**12`. Also, it is rounded to three decimal places when serialized.
+- For **String** values, `String` with encoding other than `ASCII_8BIT` is used.
+    - Note that only ASCII printable characters are allowed.
+- For **Token** values, `Symbol` is used.
+    - Be aware of the syntax when serializing; see the RFC for details.
+- For **Byte Sequence** (binary) values, `String` with encoding `ASCII_8BIT` is used.
+- For **Boolean** values, `true` and `false` are used.
