@@ -29,13 +29,17 @@ Starry.parse_list('r34.example.net; error=http_request_error, ExampleCDN')
 #   @value=:"r34.example.net">,
 #  #<Starry::Item:0x0000000105a81cd0 @parameters={}, @value=:ExampleCDN>]
 
-# Retrieving bare value
+# Retrieving bare value of item
 Starry.parse_list('r34.example.net; error=http_request_error, ExampleCDN')[1].value
 # => :ExampleCDN
 
-# Retrieving parameters
+# Retrieving parameters hash of item
 Starry.parse_list('r34.example.net; error=http_request_error, ExampleCDN')[0].parameters
 # => {"error"=>:http_request_error}
+
+# Using `symbolize_names` option
+Starry.parse_list('r34.example.net; error=http_request_error, ExampleCDN', symbolize_names: true)[0].parameters
+# => {:error=>:http_request_error}
 
 # More complex case: Signature-Input field (draft-ietf-httpbis-message-signatures)
 Starry.parse_dictionary(
@@ -72,7 +76,7 @@ Starry.parse_dictionary(
 
 Use `Starry.serialize`. This single method is used for all three types: List, Dictionary, and Item.
 
-If an Item or an Inner List has parameters, create a new `Starry::Item` or `Starry::InnerList` class object and use it. Non-parameterized values can be contained without such a wrapping object. Also, note that keys of the parameters hash can be either strings or symbols.
+If an Item or an Inner List has parameters, create a new `Starry::Item` or `Starry::InnerList` class object and use it. Their constructor takes a value as its first argument and a parameters hash as its second argument. Keys of the parameters hash can be either strings or symbols. Note that non-parameterized values can be contained without such a wrapping object.
 
 ```ruby
 require 'starry'
@@ -102,6 +106,8 @@ The Structured Field Values specification defines several data types. Here we de
 - For **Inner Lists**, `Starry::InnerList` is used.
     - If it is not parameterized, `Array` may also be used when serializing.
 - For **parameters**, `Hash` is used.
+    - Keys can be either `String` or `Symbol`. When parsing, the symbolize_names option indicates which is to be used.
+    - When serializing, be aware of the syntax; see the RFC for details.
 - For **Dictionaries**, `Hash` is used.
 - For **Items**, `Starry::Item` is used.
     - When serializing, `Starry::Item` is not necessarily needed if the value is not parameterized. See the description and examples above.
