@@ -121,19 +121,19 @@ module Starry
       end
     end
 
-    def parse_list(input)
+    def parse_list(input, symbolize_names: false)
       ensure_ascii_only(input)
-      Parser.new(input).parse(:list)
+      Parser.new(input, symbolize_names: symbolize_names).parse(:list)
     end
 
-    def parse_dictionary(input)
+    def parse_dictionary(input, symbolize_names: false)
       ensure_ascii_only(input)
-      Parser.new(input).parse(:dictionary)
+      Parser.new(input, symbolize_names: symbolize_names).parse(:dictionary)
     end
 
-    def parse_item(input)
+    def parse_item(input, symbolize_names: false)
       ensure_ascii_only(input)
-      Parser.new(input).parse(:item)
+      Parser.new(input, symbolize_names: symbolize_names).parse(:item)
     end
 
     private def ensure_ascii_only(input)
