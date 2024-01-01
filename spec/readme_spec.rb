@@ -93,4 +93,45 @@ RSpec.describe 'README' do
       expect(actual).to eq(expected)
     end
   end
+
+  describe 'Pattern matching' do
+    example '`Starry::Item` can be matched with hash pattern using `value` and `parameters` keys.' do
+      actual = (
+        case Starry.parse_item('r34.example.net; error=http_request_error')
+        in value:, parameters:
+          "v: #{ value }, p: #{ parameters }"
+        else
+          raise "not matched"
+        end
+      )
+      expected = "v: r34.example.net, p: {\"error\"=>:http_request_error}"
+      expect(actual).to eq(expected)
+    end
+    
+    example '`Starry::InnerList` can be matched with hash pattern using `value` and `parameters` keys.' do
+      actual = (
+        case Starry.parse_dictionary('sig-b25=("date" "@authority" "content-type");created=1618884473;keyid="test-shared-secret"')['sig-b25']
+        in value:, parameters:
+          "v: #{ value.map(&:value) }, p: #{ parameters }"
+        else
+          raise "not matched"
+        end
+      )
+      expected = "v: [\"date\", \"@authority\", \"content-type\"], p: {\"created\"=>1618884473, \"keyid\"=>\"test-shared-secret\"}"
+      expect(actual).to eq(expected)
+    end
+  
+    example '`Starry::InnerList` can be matched with array pattern.' do
+      actual = (
+        case Starry.parse_dictionary('sig-b25=("date" "@authority" "content-type");created=1618884473;keyid="test-shared-secret"')['sig-b25']
+        in first, second, *rest
+          "first: #{ first.value }, second: #{ second.value }, rest: #{ rest.map(&:value) }"
+        else
+          raise "not matched"
+        end
+      )
+      expected = "first: date, second: @authority, rest: [\"content-type\"]"
+      expect(actual).to eq(expected)
+    end
+  end
 end

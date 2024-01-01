@@ -14,4 +14,8 @@ class Starry::Item
   def to_s
     "#{ Starry.serialize_bare_item(value) }#{ Starry.serialize_parameters(parameters) }"
   end
+
+  def deconstruct_keys(keys)
+    { value: @value, parameters: @parameters }
+  end
 end

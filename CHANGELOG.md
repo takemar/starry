@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Added
 
 - Added `symbolize_names` option to `Starry.parse_*` methods.
+- Added pattern matching support in `Starry::Item` and `Starry::InnerList`.
 
 ## [0.1.0](https://github.com/takemar/starry/compare/e4e86131b013819935425b9e438cc8e8734bf3fd...0.1.0) - 2023-10-07
 

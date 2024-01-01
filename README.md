@@ -121,3 +121,43 @@ The Structured Field Values specification defines several data types. Here we de
     - Be aware of the syntax when serializing; see the RFC for details.
 - For **Byte Sequence** (binary) values, `String` with encoding `ASCII_8BIT` is used.
 - For **Boolean** values, `true` and `false` are used.
+
+## Pattern matching
+
+`Starry::Item` and `Starry::InnerList` support [pattern matching](https://docs.ruby-lang.org/en/master/syntax/pattern_matching_rdoc.html).
+
+```ruby
+require 'starry'
+
+# `Starry::Item` can be matched with hash pattern using `value` and `parameters` keys.
+case Starry.parse_item('r34.example.net; error=http_request_error')
+in value:, parameters:
+  "v: #{ value }, p: #{ parameters }"
+else
+  raise "not matched"
+end
+# => "v: r34.example.net, p: {\"error\"=>:http_request_error}"
+
+# The same applies to `Starry::InnerList`.
+inner_list = Starry.parse_dictionary(
+  'sig-b25=("date" "@authority" "content-type");created=1618884473;' \
+  'keyid="test-shared-secret"'
+)['sig-b25']
+case inner_list
+in value:, parameters:
+  "v: #{ value.map(&:value) }, p: #{ parameters }"
+else
+  raise "not matched"
+end
+# => "v: [\"date\", \"@authority\", \"content-type\"], p: {\"created\"=>1618884473, \"keyid\"=>\"test-shared-secret\"}"
+
+# `Starry::InnerList` can be also matched with array pattern.
+# Note that parameters cannot be available for matching in array pattern.
+case inner_list
+in first, second, *rest
+  "first: #{ first.value }, second: #{ second.value }, rest: #{ rest.map(&:value) }"
+else
+  raise "not matched"
+end
+# => "first: date, second: @authority, rest: [\"content-type\"]"
+```

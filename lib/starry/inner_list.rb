@@ -23,4 +23,10 @@ class Starry::InnerList
     end
     "(#{ members.join(' ') })#{ Starry.serialize_parameters(parameters) }"
   end
+
+  alias deconstruct to_a
+
+  def deconstruct_keys(keys)
+    { value: @value, parameters: @parameters }
+  end
 end
