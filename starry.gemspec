@@ -15,4 +15,5 @@ Gem::Specification.new do |s|
     'source_code_uri' => 'https://github.com/takemar/starry',
   }
   s.required_ruby_version = '>= 2.7.0'
+  s.add_runtime_dependency "base64"
 end
